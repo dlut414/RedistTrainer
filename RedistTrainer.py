@@ -8,7 +8,7 @@ while True:
     try:
         filename = input(" data file to read: ")
         path = dirc + filename
-        print path
+        print(path)
         f = open(path)
         for line in f:
             words = line.split(' ')
