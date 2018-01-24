@@ -24,11 +24,11 @@ np.random.shuffle(xy)
 x_data = xy[:,:-2]
 y_data = xy[:,-2:]
 
-layers = [16, 8, 8, 2]
-maxIter = 500
-alpha = 0.0001
+layers = [16, 8, 8, 8, 2]
+maxIter = 10000
+alpha = 0.03
 reg = 0.0
-batch_size = 200
+batch_size = 500
 
 x = tf.placeholder(tf.float32, shape=[None, layers[0]])
 y_ = tf.placeholder(tf.float32, shape=[None, layers[-1]])
@@ -45,7 +45,7 @@ for i in range(1, len(layers)):
     a[i] = tf.nn.relu(tf.matmul(a[i-1], w[i-1]) + b[i-1])
 y = a[-1]
 
-cost = tf.norm(y - y_, ord=2)
+cost = tf.reduce_mean(tf.square(y - y_, name="cost"))
 train = tf.train.GradientDescentOptimizer(alpha).minimize(cost)
 
 n = y_data.shape[0]
@@ -64,5 +64,5 @@ with tf.Session() as sess:
             start = i* batch_size
             stop = np.minimum(start+batch_size, n_train)
             train.run(feed_dict={x:x_train[start:stop,:], y_:y_train[start:stop,:]})
-        print("train cost: ", cost.eval(feed_dict={x:x_train, y_:y_train}))
-        print("test cost: ", cost.eval(feed_dict={x:x_val, y_:y_val}))
+        print(epoch, "train cost: ", cost.eval(feed_dict={x:x_train, y_:y_train}))
+        print(epoch, "test cost: ", cost.eval(feed_dict={x:x_val, y_:y_val}))
