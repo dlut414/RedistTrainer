@@ -70,4 +70,4 @@ with tf.Session() as sess:
             train.run(feed_dict={x:x_train[start:stop,:], y_:y_train[start:stop,:]})
         print(epoch, "train cost: ", cost.eval(feed_dict={x:x_train, y_:y_train}))
         print(epoch, "test cost: ", cost.eval(feed_dict={x:x_val, y_:y_val}))
-    saver.save(sess, "./model.ckpt")
+        saver.save(sess, "./model", global_step=1000)
