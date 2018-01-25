@@ -25,10 +25,10 @@ x_data = xy[:,:-2]
 y_data = xy[:,-2:]
 
 layers = [16, 8, 8, 8, 2]
-maxIter = 10000
-alpha = 0.03
+maxIter = 5000
+alpha = 0.1
 reg = 0.0
-batch_size = 500
+batch_size = 1000
 
 x = tf.placeholder(tf.float32, shape=[None, layers[0]])
 y_ = tf.placeholder(tf.float32, shape=[None, layers[-1]])
@@ -56,6 +56,7 @@ y_train = y_data[:n_train,:]
 x_val = x_data[n_train:,:]
 y_val = y_data[n_train:,:]
 
+saver = tf.train.Saver()
 #start training
 with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
@@ -66,3 +67,4 @@ with tf.Session() as sess:
             train.run(feed_dict={x:x_train[start:stop,:], y_:y_train[start:stop,:]})
         print(epoch, "train cost: ", cost.eval(feed_dict={x:x_train, y_:y_train}))
         print(epoch, "test cost: ", cost.eval(feed_dict={x:x_val, y_:y_val}))
+    saver.save(sess, "./model.ckpt")
