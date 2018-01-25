@@ -1,4 +1,5 @@
 # read input data
+import os
 import tensorflow as tf
 import numpy as np
 
@@ -6,14 +7,16 @@ xy_lst = []
 dirc = ".\\data\\"
 while True:
     try:
-        filename = input(" data file to read: ")
-        path = dirc + filename
-        print(path)
-        f = open(path)
-        for line in f:
-            words = line.split(' ')
-            xy_lst.append(list(map(float, words)))
-        f.close()
+        folder = input(" entry a data folder: ")
+        path = dirc + folder
+        for file in os.listdir(path):
+            filename = path + "\\" + file
+            print(filename)
+            f = open(filename)
+            for line in f:
+                words = line.split(' ')
+                xy_lst.append(list(map(float, words)))
+            f.close()
     except IOError:
         print(IOError)
         break
@@ -24,7 +27,7 @@ np.random.shuffle(xy)
 x_data = xy[:,:-2]
 y_data = xy[:,-2:]
 
-layers = [16, 8, 8, 8, 2]
+layers = [48, 8, 8, 8, 2]
 maxIter = 5000
 alpha = 0.1
 reg = 0.0
