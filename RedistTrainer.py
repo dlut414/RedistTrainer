@@ -33,8 +33,8 @@ alpha = 0.03
 reg = 0.0
 batch_size = 1000
 
-x = tf.placeholder(tf.float32, shape=[None, layers[0]])
-y_ = tf.placeholder(tf.float32, shape=[None, layers[-1]])
+x = tf.placeholder(tf.float32, shape=[None, layers[0]], name="x")
+y_ = tf.placeholder(tf.float32, shape=[None, layers[-1]], name="y_")
 
 a, w, b = [x], [], []
 for i in range(1, len(layers)):
@@ -43,7 +43,7 @@ for i in range(1, len(layers)):
     b.append(tf.Variable(tf.zeros(layers[i])))
     a.append(tf.Variable(tf.zeros(layers[i])))
 
-y = tf.Variable(tf.zeros(layers[-1]))
+y = tf.Variable(tf.zeros(layers[-1]), name="y")
 for i in range(1, len(layers)):
     a[i] = tf.nn.relu(tf.matmul(a[i-1], w[i-1]) + b[i-1])
 y = a[-1]
