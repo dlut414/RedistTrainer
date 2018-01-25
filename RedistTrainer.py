@@ -27,9 +27,9 @@ np.random.shuffle(xy)
 x_data = xy[:,:-2]
 y_data = xy[:,-2:]
 
-layers = [48, 8, 8, 8, 2]
-maxIter = 5000
-alpha = 0.1
+layers = [48, 24, 8, 4, 2]
+maxIter = 10000
+alpha = 0.03
 reg = 0.0
 batch_size = 1000
 
