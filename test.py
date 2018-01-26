@@ -1,6 +1,6 @@
 import tensorflow as tf
 import numpy as np
-xx = np.random.random((200,48))
+xx = np.random.random((200,48))* 2 - 1
 with tf.Session() as sess:
     saver = tf.train.import_meta_graph("./model.meta")
     saver.restore(sess, tf.train.latest_checkpoint("./"))
