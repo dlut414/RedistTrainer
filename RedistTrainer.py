@@ -28,7 +28,7 @@ x_data = xy[:,:-2]
 y_data = xy[:,-2:]
 
 layers = [48, 24, 8, 4, 2]
-maxIter = 1500
+maxIter = 100000
 alpha = 0.03
 reg = 0.0
 batch_size = 1000
@@ -43,9 +43,10 @@ for i in range(1, len(layers)):
     b.append(tf.Variable(tf.zeros(layers[i]), name="b"+str(i)))
     a.append(tf.placeholder(tf.float32, shape=[None, layers[i]], name="a"+str(i)))
 
-for i in range(1, len(layers)):
+for i in range(1, len(layers) - 1):
     a[i] = tf.nn.relu(tf.matmul(a[i-1], w[i-1]) + b[i-1])
-y = tf.identity(a[-1], name="y")
+y = tf.matmul(a[-2], w[-1]) + b[-1]
+y = tf.identity(y, name="y")
 
 cost = tf.reduce_mean(tf.square(y - y_, name="cost"))
 train = tf.train.GradientDescentOptimizer(alpha).minimize(cost, name="train_op")
