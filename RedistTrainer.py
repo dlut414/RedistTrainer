@@ -28,7 +28,7 @@ x_data = xy[:,:-2]
 y_data = xy[:,-2:]
 
 layers = [48, 24, 8, 4, 2]
-maxIter = 10000
+maxIter = 1500
 alpha = 0.03
 reg = 0.0
 batch_size = 1000
@@ -39,17 +39,16 @@ y_ = tf.placeholder(tf.float32, shape=[None, layers[-1]], name="y_")
 a, w, b = [x], [], []
 for i in range(1, len(layers)):
     shape = (layers[i-1], layers[i])
-    w.append(tf.Variable(tf.random_normal(shape, stddev=0.1)))
-    b.append(tf.Variable(tf.zeros(layers[i])))
-    a.append(tf.Variable(tf.zeros(layers[i])))
+    w.append(tf.Variable(tf.random_normal(shape, stddev=0.1), name="w"+str(i)))
+    b.append(tf.Variable(tf.zeros(layers[i]), name="b"+str(i)))
+    a.append(tf.placeholder(tf.float32, shape=[None, layers[i]], name="a"+str(i)))
 
-y = tf.Variable(tf.zeros(layers[-1]), name="y")
 for i in range(1, len(layers)):
     a[i] = tf.nn.relu(tf.matmul(a[i-1], w[i-1]) + b[i-1])
-y = a[-1]
+y = tf.identity(a[-1], name="y")
 
 cost = tf.reduce_mean(tf.square(y - y_, name="cost"))
-train = tf.train.GradientDescentOptimizer(alpha).minimize(cost)
+train = tf.train.GradientDescentOptimizer(alpha).minimize(cost, name="train_op")
 
 n = y_data.shape[0]
 n_train = int(0.7* n)
