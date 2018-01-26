@@ -102,5 +102,6 @@ ENV/
 
 ./data/
 /data
-*.ckpt.*
+model.*
 checkpoint
+

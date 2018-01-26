@@ -1,9 +1,11 @@
 import tensorflow as tf
 import numpy as np
-x = tf.get_variable("x", shape=[1, 48])
-y = tf.get_variable("y", shape=[1, 2])
-saver = tf.train.Saver()
-xx = np.ones((1,48))
+xx = np.random.random((1,48))* 10
 with tf.Session() as sess:
-    saver.restore(sess, "./model.ckpt")
-    print(y.eval(feed_dict={x:xx}))
+    saver = tf.train.import_meta_graph("./model.meta")
+    saver.restore(sess, tf.train.latest_checkpoint("./"))
+    graph = tf.get_default_graph()
+    x = graph.get_tensor_by_name("x:0")
+    y = graph.get_tensor_by_name("y:0")
+    output = sess.run(y, feed_dict={x:xx})
+    print(output)
